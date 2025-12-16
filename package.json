@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+ "start": "node dist/index.js",
+ "build": "tsc",
+ "dev": "ts-node src/index.ts"
   },
   "repository": {
     "type": "git",
@@ -19,11 +21,14 @@
   "homepage": "https://github.com/Kaveewison/SE713-REST#readme",
   "devDependencies": {
     "@types/express": "^5.0.6",
-    "@types/node": "^25.0.1",
+    "@types/node": "^25.0.2",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
   },
   "dependencies": {
     "express": "^5.2.1"
-  }
+  },
+  "type": "commonjs"
+  
 }
+

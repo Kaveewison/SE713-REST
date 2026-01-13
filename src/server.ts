@@ -1,66 +1,60 @@
-import express from 'express'
+import express from "express";
 
-import type { Request, Response } from 'express';
-const app = express()
-const port = 3000
-app.use(express.json())
-
-app.get('/', (req: Request, res: Response) => {
-  res.send('Hello World!')
-})
+import type { Request, Response } from "express";
+const app = express();
+const port = 3000;
+app.use(express.json());
 
 app.listen(port, () => {
-  console.log(`App listening at http://localhost:${port}`)
-})
+  console.log(`App listening at http://localhost:${port}`);
+});
 
- app.get('/test', (req, res) => {
-        // res.send('Hello World! 3')
-        let returnObj = {
-            name: 'test',
-            age: 20,
-            address: 'Thai'
-        }
-        res.send(returnObj);
+function getEventByCategory(category: string): Event[] {
+  const filteredEvents = events.filter((event) => event.category === category);
+  return filteredEvents;
+}
 
-  })
+function getAllEvents(): Event[] {
+  return events;
+}
 
-  app.get('/test', (req: Request, res: Response) => {
-    const id = req.query.id;   
-    const output = `id: ${id}`;
-    res.send(output);
-  })
+function getEventById(id: number): Event | undefined {
+  return events.find((event) => event.id === id);
+}
 
-    app.get("/events", (req, res) => {
-    if (req.query.category) {
-    const category = req.query.category;
-    const filteredEvents = events.filter((event) => event.category === category);
+function addEvent(newEvent: Event): Event {
+  newEvent.id = events.length + 1;
+  events.push(newEvent);
+  return newEvent;
+}
+
+app.get("/events", (req, res) => {
+  if (req.query.category) {
+    const category = req.query.category as string;
+    const filteredEvents = getEventByCategory(category);
     res.json(filteredEvents);
-    } else {
-    res.json(events);
-    }
+  } else {
+    res.json(getAllEvents());
+  }
 });
 
 app.get("/events/:id", (req, res) => {
-    const id = parseInt(req.params.id);
-    const event = events.find((event) => event.id === id);
-    if (event) {
+  const id = parseInt(req.params.id);
+  const event = getEventById(id);
+  if (event) {
     res.json(event);
-    } else {
+  } else {
     res.status(404).send("Event not found");
-    }
-});  
-
-app.post("/events", (req, res) => {
-    const newEvent: Event = req.body;
-    newEvent.id = events.length + 1;
-    events.push(newEvent);
-    res.json(newEvent);
+  }
 });
 
+app.post("/events", (req, res) => {
+  const newEvent: Event = req.body;
+  addEvent(newEvent);
+  res.json(newEvent);
+});
 
-
-
-  interface Event {
+interface Event {
   id: number;
   category: string;
   title: string;
@@ -74,16 +68,16 @@ app.post("/events", (req, res) => {
 
 const events: Event[] = [
   {
-        id: 1,
-        category: "Music",
-        title: "Concert",
-        description: "A live concert",
-        location: "London",
-        date: "2021-07-01",
-        time: "19:00",
-        petsAllowed: false,
-        organizer: "Live Nation",
-    },
+    id: 1,
+    category: "Music",
+    title: "Concert",
+    description: "A live concert",
+    location: "London",
+    date: "2021-07-01",
+    time: "19:00",
+    petsAllowed: false,
+    organizer: "Live Nation",
+  },
   {
     id: 2,
     category: "Art",
@@ -162,9 +156,4 @@ const events: Event[] = [
     petsAllowed: true,
     organizer: "Discovery Centre",
   },
-
-  ]
-
-
-
-
+];
